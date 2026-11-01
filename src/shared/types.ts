@@ -27,7 +27,7 @@ export interface ModelInfo {
   id: string
   name: string
   description: string
-  /** Whether the Freebuff API currently offers this model. */
+  /** Whether the Groq API currently offers this model. */
   available: boolean
 }
 

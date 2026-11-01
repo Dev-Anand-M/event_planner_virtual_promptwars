@@ -66,10 +66,12 @@ The core split is **rules for structure, the model for specifics**:
 
 - **Stack:** React + TypeScript + Tailwind on Vite, a Hono Worker handling
   `/api/*`, D1 for storage, deployed on Cloudflare (Freebuff Sites). The LLM
-  is called by the Worker through the OpenAI-compatible Freebuff API;
+  is called by the Worker through Groq's OpenAI-compatible API;
   streaming replies are server-sent events.
 - **Models:** the Worker calls `/chat/completions` with the app's key from
-  `OPENAI_API_KEY`; the browser never sees credentials.
+  `GROQ_API_KEY`; the browser never sees credentials. The picker allowlists
+  GPT-OSS 20B, GPT-OSS 120B and Qwen 3.8 27B (openai/gpt-oss-20b,
+  openai/gpt-oss-120b, qwen/qwen3.8-27b on Groq).
 - **Event flow:** create an event (type, name, date, guests, budget, city,
   notes) → the server builds the plan → the event page shows the plan panels
   and an event-bound chat. Toggle milestones/vendors, drop saved ideas,
@@ -113,7 +115,8 @@ bun run build      # dist/client + dist/ai_chat/index.js (Cloudflare Worker)
 ```
 
 Until an API key is configured the app shows a setup card, and it unlocks on
-its own once `OPENAI_API_KEY` exists. The key lives in `.env` (git-ignored) locally
+its own once `GROQ_API_KEY` exists. Get a free key at
+https://console.groq.com/keys. The key lives in `.env` (git-ignored) locally
 and in Sites → Secrets when deployed; it is only read by the Worker.
 
 ## Security

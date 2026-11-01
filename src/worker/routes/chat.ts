@@ -1,6 +1,6 @@
 // POST /api/chat: one user turn in, one streamed reply out. The reply is a
 // server-sent event stream of ChatEvent JSON (shared/types.ts). The browser
-// never talks to the Freebuff API; this route does, with the Worker's key.
+// never talks to the Groq API; this route does, with the Worker's key.
 
 import { Hono } from 'hono'
 import { streamSSE, type SSEStreamingApi } from 'hono/streaming'

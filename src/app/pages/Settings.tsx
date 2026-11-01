@@ -2,7 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
-import { DAILY_MESSAGE_LIMIT, FREEBUFF_API_KEYS_URL } from '../../shared/config'
+import { DAILY_MESSAGE_LIMIT, GROQ_API_KEYS_URL } from '../../shared/config'
 import { Avatar, Badge, Button, ConfirmDialog, useToast } from '../components/ui'
 import { useDeleteAllConversations, useMe } from '../lib/api'
 import { untilLabel } from '../lib/format'
@@ -16,11 +16,11 @@ export function Settings() {
   if (!me) return null
   const connections: { label: string; ok: boolean; detail: string; action?: React.ReactNode }[] = [
     {
-      label: 'Freebuff API',
+      label: 'Groq API',
       ok: me.capabilities.ai,
-      detail: me.capabilities.ai ? 'OPENAI_API_KEY is set' : 'OPENAI_API_KEY is not set',
+      detail: me.capabilities.ai ? 'GROQ_API_KEY is set' : 'GROQ_API_KEY is not set',
       action: me.capabilities.ai ? undefined : (
-        <a href={FREEBUFF_API_KEYS_URL} target="_blank" rel="noreferrer" className="inline-flex h-8 items-center gap-1 rounded-tile px-2.5 text-[13px] font-medium text-fg transition-colors hover:bg-surface-2">
+        <a href={GROQ_API_KEYS_URL} target="_blank" rel="noreferrer" className="inline-flex h-8 items-center gap-1 rounded-tile px-2.5 text-[13px] font-medium text-fg transition-colors hover:bg-surface-2">
           Get a key
           <ArrowUpRight className="size-3.5" />
         </a>

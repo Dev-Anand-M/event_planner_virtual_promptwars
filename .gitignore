@@ -11,3 +11,4 @@ dist
 dev.pid
 dev.pid.txt
 wrangler-*.log
+/freebuff-sites-build/

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { extractProposal } from '../../shared/planner'
-import { BRAND, DEFAULT_MODEL, FREEBUFF_API_KEYS_URL, MODELS, SUGGESTIONS } from '../../shared/config'
+import { BRAND, DEFAULT_MODEL, GROQ_API_KEYS_URL, MODELS, SUGGESTIONS } from '../../shared/config'
 import type { Message } from '../../shared/types'
 import { Composer } from '../components/Composer'
 import { AssistantMessage, UserMessage } from '../components/Message'
@@ -233,7 +233,7 @@ function ChatThread({ conversationId: propId, eventId, onConversation, emptySugg
         {!ai && !empty ? (
           <Notice>
             Add an API key to continue.{' '}
-            <a href={FREEBUFF_API_KEYS_URL} target="_blank" rel="noreferrer" className="font-medium text-fg underline underline-offset-2">
+            <a href={GROQ_API_KEYS_URL} target="_blank" rel="noreferrer" className="font-medium text-fg underline underline-offset-2">
               Get one
             </a>
           </Notice>
@@ -336,12 +336,12 @@ function SetupCard() {
       <div className="grid size-12 place-items-center rounded-card bg-surface shadow-card">
         <KeyRound className="size-5 text-muted" />
       </div>
-      <h1 className="mt-5 text-[22px] font-semibold tracking-[-0.02em]">Connect the Freebuff API</h1>
+      <h1 className="mt-5 text-[22px] font-semibold tracking-[-0.02em]">Connect the Groq API</h1>
       <p className="mt-2 max-w-sm text-[14px] leading-relaxed text-muted">
-        Add your API key as <code className="rounded-[6px] bg-surface-2 px-1.5 py-0.5 font-mono text-[12.5px] text-fg">OPENAI_API_KEY</code> and {BRAND} starts answering.
+        Add your API key as <code className="rounded-[6px] bg-surface-2 px-1.5 py-0.5 font-mono text-[12.5px] text-fg">GROQ_API_KEY</code> and {BRAND} starts answering.
       </p>
       <a
-        href={FREEBUFF_API_KEYS_URL}
+        href={GROQ_API_KEYS_URL}
         target="_blank"
         rel="noreferrer"
         className="mt-6 inline-flex h-10 items-center gap-1.5 rounded-control bg-fg px-4 text-[14px] font-medium text-white transition-colors hover:bg-[#2e2c27]"

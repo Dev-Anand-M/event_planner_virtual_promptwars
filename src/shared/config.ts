@@ -24,18 +24,18 @@ When your answer proposes changes to the plan itself (budget lines, timeline mil
 Keep the block small: only sections that change, as the plan schema (insertBudgetLines, insertTimeline, insertVendors, insertIdeas). It must be valid JSON on one fence. Never mention the block in prose.`
 
 /**
- * Models people may choose, in picker order. Ids are Freebuff API model ids
- * (GET https://freebuff.com/api/v1/paid/models lists them). The Worker refuses
+ * Models people may choose, in picker order. Ids are Groq model ids
+ * (GET https://api.groq.com/openai/v1/models lists them). The Worker refuses
  * any model not in this list, so this is also the spending allowlist.
+ * `streams` is the fallback when the API does not advertise capabilities.
  */
 export const MODELS = [
-  { id: 'deepseek-v4.1-flash', name: 'DeepSeek V4.1 Flash', description: 'Fast, for everyday questions' },
-  { id: 'claude-sonnet-5-5', name: 'Claude Sonnet 5.5', description: 'Careful writing and analysis' },
-  { id: 'gpt-6.1-sol', name: 'GPT-6.1 Sol', description: 'Broad knowledge' },
-  { id: 'gemini-4-argon', name: 'Gemini 4 Argon', description: 'Long documents' },
+  { id: 'openai/gpt-oss-20b', name: 'GPT-OSS 20B', description: 'Fastest and cheapest, for everyday planning', streams: true },
+  { id: 'openai/gpt-oss-120b', name: 'GPT-OSS 120B', description: 'Flagship: careful reasoning and writing', streams: true },
+  { id: 'qwen/qwen3.8-27b', name: 'Qwen 3.8 27B', description: 'Multilingual reasoning (preview)', streams: true },
 ] as const
 export type ModelId = (typeof MODELS)[number]['id']
-export const DEFAULT_MODEL: ModelId = 'deepseek-v4.1-flash'
+export const DEFAULT_MODEL: ModelId = 'openai/gpt-oss-120b'
 
 /** Per-user limits. Messages are counted per UTC day. */
 export const DAILY_MESSAGE_LIMIT = 50
@@ -52,7 +52,7 @@ export const SUGGESTIONS = [
   'Draft a friendly invitation message for a block-party potluck',
 ]
 
-/** The Freebuff API, unless OPENAI_BASE_URL says otherwise. */
-export const FREEBUFF_API_URL = 'https://freebuff.com/api/v1/paid'
+/** The Groq API, unless GROQ_BASE_URL says otherwise. */
+export const GROQ_API_URL = 'https://api.groq.com/openai/v1'
 /** Where the app's owner creates and funds an API key. */
-export const FREEBUFF_API_KEYS_URL = 'https://freebuff.com/account/api'
+export const GROQ_API_KEYS_URL = 'https://console.groq.com/keys'
