@@ -105,3 +105,4 @@ export default async function handler(req: Request | IncomingMessage, res?: Serv
   const worker = await getWorker()
   return worker.fetch(req as Request)
 }
+
