@@ -104,14 +104,28 @@ Documented simplifications, on purpose:
    user and seeds a sample event + conversation; deployed it is off and Sign in
    with Freebuff is required.
 
-## Running it
+## Running and Deploying
+
+### Deploying on Vercel
+
+The repository is configured with `vercel.json` and a serverless API handler in `api/index.ts`:
+
+1. Import the repository in [Vercel](https://vercel.com/new).
+2. Framework preset is automatically detected as **Vite** (output directory: `dist`).
+3. Add your environment variable in Vercel project settings:
+   - `GROQ_API_KEY`: Your Groq API key (from https://console.groq.com/keys).
+4. Click **Deploy**.
+
+Vercel serves the built client assets statically and routes /api/* to the serverless function in `api/index.ts`, backed by a lightweight SQLite persistence shim and demo host user for immediate hackathon evaluation.
+
+### Local Development
 
 ```sh
 bun install
-bun run dev        # http://localhost:5173, local D1 via Miniflare
-bun test           # planner-engine and validation tests
+bun run dev        # http://localhost:5173
+bun test           # planner-engine, validation, and Vercel integration tests
 bun run typecheck
-bun run build      # dist/client + dist/ai_chat/index.js (Cloudflare Worker)
+bun run build      # production build (dist/ + Cloudflare Worker bundle)
 ```
 
 Until an API key is configured the app shows a setup card, and it unlocks on

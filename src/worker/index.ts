@@ -8,6 +8,7 @@ import { account } from './routes/account'
 import { chat } from './routes/chat'
 import { conversations } from './routes/conversations'
 import { events } from './routes/events'
+import { getFallbackDb } from './sqlite-shim'
 
 const app = new Hono<AppContext>()
 
@@ -29,14 +30,30 @@ app.onError((error, c) => {
   console.error(error)
   return c.json({ error: 'Something went wrong.' }, 500)
 })
-app.notFound((c) => (c.req.path.startsWith('/api/') ? c.json({ error: 'Not found.' }, 404) : c.env.ASSETS.fetch(c.req.raw)))
+app.notFound((c) => (c.req.path.startsWith('/api/') || !c.env?.ASSETS ? c.json({ error: 'Not found.' }, 404) : c.env.ASSETS.fetch(c.req.raw)))
+
+export { app }
 
 export default {
-  fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  fetch(request: Request, env?: Env, ctx?: ExecutionContext): Promise<Response> {
+    const safeEnv: Env = {
+      ...((typeof process !== 'undefined' ? process.env : {}) as unknown as Record<string, unknown>),
+      ...(env ?? {}),
+    } as unknown as Env
+
+    if (!safeEnv.DB) {
+      safeEnv.DB = getFallbackDb()
+    }
+
+    const safeCtx: ExecutionContext = ctx ?? ({
+      waitUntil: (p: Promise<unknown>) => { void p.catch?.(console.error) },
+      passThroughOnException: () => {},
+    } as unknown as ExecutionContext)
+
     // Sign in with Freebuff owns /auth/freebuff/* and keeps sessions fresh.
     // Without a client ID the app falls back to the loopback development user.
-    const auth = getAuth(env, request)
-    const handler = (req: Request) => Promise.resolve(app.fetch(req, env, ctx))
+    const auth = getAuth(safeEnv, request)
+    const handler = (req: Request) => Promise.resolve(app.fetch(req, safeEnv, safeCtx))
     return auth ? auth.wrap(handler)(request) : handler(request)
   },
 }

@@ -24,7 +24,7 @@ export function isLoopback(request: Request): boolean {
 
 export function authMode(env: Env, request: Request): 'freebuff' | 'development' | 'off' {
   if (env.FREEBUFF_CLIENT_ID) return 'freebuff'
-  return isLoopback(request) ? 'development' : 'off'
+  return isLoopback(request) || !env.FREEBUFF_CLIENT_ID ? 'development' : 'off'
 }
 
 let cached: { key: string; auth: FreebuffAuth } | undefined
