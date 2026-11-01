@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'bun:test'
 import handler from '../api/index'
+import pathHandler from '../api/[...path]'
 import worker from '../src/worker/index'
 
 describe('Vercel API & SQLite Shim Integration', () => {
@@ -74,5 +75,16 @@ describe('Vercel API & SQLite Shim Integration', () => {
     expect(res.status).toBe(200)
     const data = await res.json()
     expect(data).toEqual({ ok: true })
+  })
+
+  it('Vercel catch-all handler processes /api/me correctly', async () => {
+    const req = new Request('https://event-planner-test.vercel.app/api/me', {
+      headers: { origin: 'https://event-planner-test.vercel.app' },
+    })
+    const res = (await pathHandler(req)) as Response
+    expect(res.status).toBe(200)
+    const data = (await res.json()) as { user: { sub: string }; capabilities: { database: boolean } }
+    expect(data.user.sub).toBe('dev-user')
+    expect(data.capabilities.database).toBe(true)
   })
 })

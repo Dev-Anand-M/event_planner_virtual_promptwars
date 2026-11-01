@@ -18,9 +18,17 @@ export async function readError(response: Response): Promise<ApiError> {
   let code: string | undefined
   let resetsAt: number | undefined
   try {
-    const body = (await response.json()) as { error?: string; message?: string; resetsAt?: number }
-    message = body.message ?? body.error ?? message
-    code = body.error
+    const body = (await response.json()) as { error?: unknown; message?: unknown; resetsAt?: number }
+    if (body.error && typeof body.error === 'object') {
+      const errObj = body.error as { message?: string; code?: string }
+      message = errObj.message || (typeof body.message === 'string' ? body.message : message)
+      code = errObj.code
+    } else if (typeof body.error === 'string') {
+      message = typeof body.message === 'string' ? body.message : body.error
+      code = body.error
+    } else if (typeof body.message === 'string') {
+      message = body.message
+    }
     resetsAt = body.resetsAt
   } catch {
     /* no body */
